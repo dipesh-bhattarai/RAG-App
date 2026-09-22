@@ -8,3 +8,6 @@ __pycache__/
 
 # Ignore local user uploads
 uploads/
+
+# Qdrant local database
+qdrant_storage/
