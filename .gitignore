@@ -5,3 +5,6 @@ env/
 
 # Python cache
 __pycache__/
+
+# Ignore local user uploads
+uploads/
