@@ -17,13 +17,15 @@ async def upload_pdf(file: UploadFile = File(...)):
             detail = "Only PDF files are allowed"
         )
 
+    document_id = str(uuid4())
+
     filename = f"{uuid4()}.pdf"
     file_path = UPLOAD_DIR /filename
 
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
 
-    result = ingest_pdf(pdf_path= file_path)
+    result = ingest_pdf(pdf_path= file_path, document_id= document_id, filename= file.filename)
 
     return {
         "message":"PDF uploaded successfully",

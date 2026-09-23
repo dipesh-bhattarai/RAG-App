@@ -2,7 +2,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance , PointStruct, VectorParams
 from uuid import uuid4
 
-client = QdrantClient("localhost", port=633)
+client = QdrantClient("localhost", port=6333)
 
 COLLECTION_NAME = "documents"
 
@@ -17,7 +17,7 @@ def create_collection(vector_size:int):
         return
     client.create_collection(
         collection_name= COLLECTION_NAME,
-        vector_config= VectorParams(
+        vectors_config= VectorParams(
             size = vector_size,
             distance = Distance.COSINE
         )
@@ -32,7 +32,10 @@ def store_embeddings(embeddings):
                 id= str(uuid4()),
                 vector = item["embedding"],
                 payload={
-                    "text":item["text"]
+                    "text": item["text"],
+                    "filename": item["filename"],
+                    "document_id": item["document_id"],
+                    "chunk_index": item["chunk_index"],
                 }
             )
         )

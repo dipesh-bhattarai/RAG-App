@@ -15,4 +15,14 @@ def ask(question:str):
         context = context
     )
 
-    return answer
+    sources = [
+       {
+         "text": chunk["text"]  
+       }
+       for chunk in chunks
+   ]
+
+    return {
+        "answer": answer,
+        "sources":sources
+    }
