@@ -8,12 +8,13 @@ llm = ChatGroq(
     temperature=0
 )
 
-def chat(question: str, context:str):
+def chat(question: str, context:str, history:str):
     prompt = f"""
 You are a helpful assistant.
 Anawer only using the provided context.
 Context:{context}
 Question:{question}
+History:{history}
 """
 
     response = llm.invoke(
