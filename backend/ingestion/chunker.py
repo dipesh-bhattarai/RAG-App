@@ -1,18 +1,53 @@
-from docling.document_converter import DocumentConverter
+from docling.document_converter import (
+    DocumentConverter,
+    PdfFormatOption,
+)
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.chunking import HybridChunker
 
-converter = DocumentConverter()
+
+# ------------------------------------------------------------
+# PDF pipeline configuration
+# ------------------------------------------------------------
+
+pipeline_options = PdfPipelineOptions()
+
+# Disable OCR for text-based PDFs
+pipeline_options.do_ocr = False
+
+
+# ------------------------------------------------------------
+# Document converter
+# ------------------------------------------------------------
+
+converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options
+        )
+    }
+)
+
+
+# ------------------------------------------------------------
+# Structure-aware chunker
+# ------------------------------------------------------------
+
 chunker = HybridChunker()
 
+
 def chunk_pdf(pdf_path: str):
+
     result = converter.convert(pdf_path)
 
-    chunks =[]
+    chunks = []
 
     for chunk in chunker.chunk(result.document):
-        chunks.append(chunk.text)
+
+        text = chunk.text.strip()
+
+        if text:
+            chunks.append(text)
 
     return chunks
-
-
-

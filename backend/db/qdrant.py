@@ -49,9 +49,9 @@ def list_document():
     offset = None
 
     while True:
-        points, offset= client.scroll(
+        points, offset = client.scroll(
             collection_name=COLLECTION_NAME,
-            limit= 100,
+            limit=100,
             with_payload=True,
             with_vectors=False,
             offset=offset
@@ -60,21 +60,21 @@ def list_document():
         for point in points:
             payload = point.payload
 
-
             document_id = payload["document_id"]
+
             if document_id not in documents:
-                documents[document_id]= {
-                    "document_id":document_id,
+                documents[document_id] = {
+                    "document_id": document_id,
                     "filename": payload["filename"],
-                    "chunks":0
+                    "chunks": 0
                 }
 
-            documents[document_id]["chunks"]+=1
+            documents[document_id]["chunks"] += 1
 
         if offset is None:
             break
 
-        return list(documents.values())
+    return list(documents.values())
 
 def delete_document(document_id):
     client.delete(
@@ -108,16 +108,16 @@ def list_chunks():
         for point in points:
             chunks.append(
                 {
-                    "text":point.payload["text"],
-                    "filename":point.payload["filename"],
-                    "document_id":point.payload["document_id"],
-                    "chunk_index":point.payload["chunk_index"],
+                    "text": point.payload["text"],
+                    "filename": point.payload["filename"],
+                    "document_id": point.payload["document_id"],
+                    "chunk_index": point.payload["chunk_index"],
                 }
             )
 
         if offset is None:
             break
 
-        return chunks
+    return chunks
     
         

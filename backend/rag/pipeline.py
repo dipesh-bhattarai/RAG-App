@@ -1,8 +1,8 @@
 from llm.chat import chat
-from retrieval.retriever import retrieve
+from retrieval.retriever import retriever
 from memory.history import get_history, add_message
 def ask(question:str, session_id):
-    chunks = retrieve(question)
+    chunks = retriever(question)
 
     context = "\n\n".join(
         chunk["text"]
