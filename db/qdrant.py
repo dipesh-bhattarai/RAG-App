@@ -1,5 +1,5 @@
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance , PointStruct, VectorParams
+from qdrant_client.models import Distance, FieldCondition, Filter, MatchValue , PointStruct, VectorParams
 from uuid import uuid4
 
 client = QdrantClient("localhost", port=6333)
@@ -42,3 +42,51 @@ def store_embeddings(embeddings):
 
 
     client.upsert(collection_name = COLLECTION_NAME, points=points)
+
+def list_document():
+    documents = {}
+
+    offset = None
+
+    while True:
+        points, offset= client.scroll(
+            collection_name=COLLECTION_NAME,
+            limit= 100,
+            with_payload=True,
+            with_vectors=False,
+            offset=offset
+        )
+
+        for point in points:
+            payload = point.payload
+
+
+            document_id = payload["document_id"]
+            if document_id not in documents:
+                documents[document_id]= {
+                    "document_id":document_id,
+                    "filename": payload["filename"],
+                    "chunks":0
+                }
+
+            documents[document_id]["chunks"]+=1
+
+        if offset is None:
+            break
+
+        return list(documents.values())
+
+def delete_document(document_id):
+    client.delete(
+        collection_name=COLLECTION_NAME,
+        points_selector=Filter(
+            must=[
+                FieldCondition(
+                    key = "document_id",
+                    match= MatchValue(
+                        value=document_id
+                    )
+                )
+            ]
+        )
+    )
