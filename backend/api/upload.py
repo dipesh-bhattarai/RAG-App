@@ -1,6 +1,6 @@
 from pathlib import Path
 from fastapi import APIRouter
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import File, HTTPException, UploadFile
 from uuid import uuid4
 from ingestion.pipeline import ingest_pdf
 

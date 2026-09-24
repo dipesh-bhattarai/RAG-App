@@ -1,13 +1,27 @@
-#virtual environments
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
 venv/
 ENV/
 env/
-.env/
-# Python cache
-__pycache__/
 
-# Ignore local user uploads
+# Environment variables
+.env
+.env.*
+
+# Local uploads
 uploads/
 
 # Qdrant local database
 qdrant_storage/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
