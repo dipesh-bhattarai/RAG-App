@@ -1,7 +1,5 @@
 from fastapi import FastAPI, APIRouter
 
-from db.qdrant import list_document
-
 app = FastAPI()
 
 router = APIRouter(
@@ -10,9 +8,12 @@ router = APIRouter(
 )
 
 
-@router.get("/")
-async def get_documents():
-    return list_document()
+@router.delete("/{document_id}")
+async def remove_document(document_id: str):
+    return {
+        "message": "delete route works",
+        "document_id": document_id
+    }
 
 
 app.include_router(router)
