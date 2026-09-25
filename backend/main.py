@@ -7,12 +7,16 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "RAG API"}
+    return {
+        "message": "RAG API"
+    }
 
 
 @app.get("/health")
 async def health():
-    return {"status": "healthy"}
+    return {
+        "status": "healthy"
+    }
 
 
 app.include_router(upload_router)
