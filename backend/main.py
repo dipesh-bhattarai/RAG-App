@@ -1,8 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 
-from api.document import router as document_router
+from db.qdrant import list_document
 
 app = FastAPI()
+
+router = APIRouter(
+    prefix="/document",
+    tags=["Documents"]
+)
+
+
+@router.get("/")
+async def get_documents():
+    return list_document()
+
+
+app.include_router(router)
 
 
 @app.get("/")
