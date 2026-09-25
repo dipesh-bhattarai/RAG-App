@@ -1,8 +1,32 @@
+import os
+from dotenv import load_dotenv
+
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, FieldCondition, Filter, MatchValue , PointStruct, VectorParams
+from qdrant_client.models import (
+    Distance,
+    FieldCondition,
+    Filter,
+    MatchValue,
+    PointStruct,
+    VectorParams
+)
 from uuid import uuid4
 
-client = QdrantClient("localhost", port=6333)
+load_dotenv()
+
+QDRANT_URL = os.getenv("QDRANT_URL")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+
+if QDRANT_URL:
+    client = QdrantClient(
+        url=QDRANT_URL,
+        api_key=QDRANT_API_KEY
+    )
+else:
+    client = QdrantClient(
+        "localhost",
+        port=6333
+    )
 
 COLLECTION_NAME = "documents"
 
