@@ -17,6 +17,3 @@ async def health():
     return {
         "status": "healthy"
     }
-
-
-app.include_router(upload_router)
