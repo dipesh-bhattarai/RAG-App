@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api.document import router as document_router
+from db.qdrant import list_document
 
 app = FastAPI()
 
@@ -13,6 +13,3 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "healthy"}
-
-
-app.include_router(document_router)
