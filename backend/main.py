@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from ingestion.chunker import chunk_pdf
+from ingestion.embedder import embed_text
 
 app = FastAPI()
 
