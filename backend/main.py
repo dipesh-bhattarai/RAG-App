@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 
+from ingestion.chunker import chunk_pdf
+
 app = FastAPI()
 
 
