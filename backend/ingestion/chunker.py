@@ -1,38 +1,28 @@
-from docling.document_converter import (
-    DocumentConverter,
-    PdfFormatOption,
-)
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.chunking import HybridChunker
+import fitz
 
 
 def chunk_pdf(pdf_path: str):
-
-    pipeline_options = PdfPipelineOptions()
-
-    # Disable OCR for text-based PDFs
-    pipeline_options.do_ocr = False
-
-    converter = DocumentConverter(
-        format_options={
-            InputFormat.PDF: PdfFormatOption(
-                pipeline_options=pipeline_options
-            )
-        }
-    )
-
-    chunker = HybridChunker()
-
-    result = converter.convert(pdf_path)
+    doc = fitz.open(pdf_path)
 
     chunks = []
 
-    for chunk in chunker.chunk(result.document):
+    for page_number, page in enumerate(doc):
+        text = page.get_text("text").strip()
 
-        text = chunk.text.strip()
+        if not text:
+            continue
 
-        if text:
-            chunks.append(text)
+        # Split page text into manageable chunks
+        words = text.split()
+
+        chunk_size = 500
+
+        for i in range(0, len(words), chunk_size):
+            chunk = " ".join(words[i:i + chunk_size]).strip()
+
+            if chunk:
+                chunks.append(chunk)
+
+    doc.close()
 
     return chunks
