@@ -47,7 +47,7 @@ RAG-App is a full-stack Retrieval-Augmented Generation system. Users upload docu
 | Backend           | FastAPI |
 | Vector Database   | Qdrant |
 | LLM Inference     | Groq |
-| Embeddings        | *(add your provider/model here)* |
+| Embeddings        | multilingual Sentence Transformer embedding model |
 | Containerization  | Docker |
 | Package Management| uv / pyproject.toml |
 
