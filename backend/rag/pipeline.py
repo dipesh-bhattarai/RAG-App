@@ -1,5 +1,6 @@
 from retrieval.retriever import retriever
 from llm.chat import chat
+from rag.query_rewriter import rewrite_query
 
 
 def build_context(results):
@@ -16,8 +17,13 @@ def build_context(results):
 
 def rag_pipeline(question: str, history: str = ""):
 
+    search_query = rewrite_query(
+        question=question,
+        history=history
+    )
+
     results = retriever(
-        question,
+        search_query,
         limit=5
     )
 
