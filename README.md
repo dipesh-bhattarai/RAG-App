@@ -107,10 +107,10 @@ RAG-App/
 
 ### Prerequisites
 
-- Python 3.x (see `.python-version`)
+- Python 3.13 
 - [uv](https://github.com/astral-sh/uv) (or pip)
 - Docker (optional, for containerized setup)
-- API keys: `GROQ_API_KEY` *(add any others your app needs, e.g. `QDRANT_URL`, `QDRANT_API_KEY`)*
+- API keys: `GROQ_API_KEY`  `QDRANT_URL`, `QDRANT_API_KEY`
 
 ### 1. Clone the repository
 
@@ -176,5 +176,5 @@ python -m backend.evaluation.evaluate
 - [ ] Add authentication for multi-user usage
 - [ ] Expand automated evaluation coverage
 
-## License
+<!-- ## License -->
 
