@@ -30,21 +30,28 @@ else:
 
 COLLECTION_NAME = "documents"
 
-def create_collection(vector_size:int):
+def create_collection(vector_size: int):
     collections = client.get_collections().collections
+
     exists = any(
         collection.name == COLLECTION_NAME
         for collection in collections
     )
 
-    if exists:
-        return
-    client.create_collection(
-        collection_name= COLLECTION_NAME,
-        vectors_config= VectorParams(
-            size = vector_size,
-            distance = Distance.COSINE
+    if not exists:
+        client.create_collection(
+            collection_name=COLLECTION_NAME,
+            vectors_config=VectorParams(
+                size=vector_size,
+                distance=Distance.COSINE
+            )
         )
+
+    # Create payload index for document filtering
+    client.create_payload_index(
+        collection_name=COLLECTION_NAME,
+        field_name="document_id",
+        field_schema="keyword"
     )
 
 
@@ -56,11 +63,12 @@ def store_embeddings(embeddings):
                 id= str(uuid4()),
                 vector = item["embedding"],
                 payload={
-                    "text": item["text"],
-                    "filename": item["filename"],
-                    "document_id": item["document_id"],
-                    "chunk_index": item["chunk_index"],
-                }
+    "text": item["text"],
+    "filename": item["filename"],
+    "document_id": item["document_id"],
+    "page": item["page"],
+    "chunk_index": item["chunk_index"],
+}
             )
         )
 
@@ -131,13 +139,14 @@ def list_chunks():
 
         for point in points:
             chunks.append(
-                {
-                    "text": point.payload["text"],
-                    "filename": point.payload["filename"],
-                    "document_id": point.payload["document_id"],
-                    "chunk_index": point.payload["chunk_index"],
-                }
-            )
+    {
+        "text": point.payload["text"],
+        "filename": point.payload["filename"],
+        "document_id": point.payload["document_id"],
+        "page": point.payload["page"],
+        "chunk_index": point.payload["chunk_index"],
+    }
+)
 
         if offset is None:
             break

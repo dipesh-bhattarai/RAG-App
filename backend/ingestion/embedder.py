@@ -1,5 +1,4 @@
 from sentence_transformers import SentenceTransformer
-from uuid import uuid4
 
 
 MODEL = "nomic-ai/nomic-embed-text-v1.5"
@@ -8,7 +7,6 @@ model = None
 
 
 def get_model():
-
     global model
 
     if model is None:
@@ -28,17 +26,22 @@ def embed_text(chunks, document_id, filename):
 
     for chunk in chunks:
 
+        text = chunk["text"]
+
         embedding = model.encode(
-            chunk,
+            text,
             normalize_embeddings=True
         )
 
-        embeddings.append({
-            "text": chunk,
-            "embedding": embedding.tolist(),
-            "document_id": document_id,
-            "filename": filename,
-            "chunk_index": str(uuid4()),
-        })
+        embeddings.append(
+            {
+                "text": text,
+                "embedding": embedding.tolist(),
+                "document_id": document_id,
+                "filename": filename,
+                "page": chunk["page"],
+                "chunk_index": chunk["chunk_index"]
+            }
+        )
 
     return embeddings

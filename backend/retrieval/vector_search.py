@@ -1,10 +1,11 @@
-from sentence_transformers import SentenceTransformer
 from db.qdrant import client, COLLECTION_NAME
+from ingestion.embedder import get_model
 
-MODEL = "nomic-ai/nomic-embed-text-v1.5"
-model = SentenceTransformer(MODEL, trust_remote_code=True)
 
-def vector_search(query:str, limit:int = 5):
+def vector_search(query: str, limit: int = 5):
+
+    model = get_model()
+
     query_embedding = model.encode(
         query,
         normalize_embeddings=True,
@@ -12,20 +13,23 @@ def vector_search(query:str, limit:int = 5):
 
     results = client.query_points(
         collection_name=COLLECTION_NAME,
-        query = query_embedding,
+        query=query_embedding,
         limit=limit,
+        with_payload=True,
     )
 
     chunks = []
-        
+
     for point in results.points:
         chunks.append(
             {
-                "text":point.payload["text"],
-                "document_id":point.payload["document_id"],
-                "chunk_index":point.payload["chunk_index"],
+                "text": point.payload["text"],
+                "document_id": point.payload["document_id"],
+                "filename": point.payload["filename"],
+                "page": point.payload["page"],
+                "chunk_index": point.payload["chunk_index"],
+                "score": point.score,
             }
         )
-    return chunks
-    
 
+    return chunks

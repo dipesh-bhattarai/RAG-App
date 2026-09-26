@@ -1,12 +1,25 @@
 from sentence_transformers import CrossEncoder
 
+
 MODEL = "BAAI/bge-reranker-v2-m3"
 
-model = CrossEncoder(MODEL)
+model = None
+
+
+def get_reranker():
+    global model
+
+    if model is None:
+        model = CrossEncoder(MODEL)
+
+    return model
+
 
 def rerank(question, chunks):
     if not chunks:
         return []
+
+    model = get_reranker()
 
     pairs = [
         (question, chunk["text"])
@@ -19,12 +32,15 @@ def rerank(question, chunks):
 
     for chunk, score in zip(chunks, scores):
         ranked.append(
-           { **chunk,
-            "rerank_score": float(score)
+            {
+                **chunk,
+                "rerank_score": float(score)
             }
-            )
+        )
+
     ranked.sort(
-        key= lambda item: item["rerank_score"],
+        key=lambda item: item["rerank_score"],
         reverse=True
     )
+
     return ranked

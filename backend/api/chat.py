@@ -1,14 +1,46 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from rag.pipeline import ask
 
-router = APIRouter(prefix="/chat", tags=["chat"])
+from rag.pipeline import rag_pipeline
+from memory.history import get_history, add_message
+
+
+router = APIRouter(
+    prefix="/chat",
+    tags=["Chat"]
+)
+
 
 class ChatRequest(BaseModel):
-    question : str
     session_id: str
+    question: str
+
 
 @router.post("/")
-def chat(request:ChatRequest):
-    answer = ask(request.question, session_id= request.session_id)
-    return answer
+async def chat(request: ChatRequest):
+
+    history = get_history(request.session_id)
+
+    history_text = "\n".join(
+        f"{message['role']}: {message['content']}"
+        for message in history
+    )
+
+    result = rag_pipeline(
+        question=request.question,
+        history=history_text
+    )
+
+    add_message(
+        request.session_id,
+        "user",
+        request.question
+    )
+
+    add_message(
+        request.session_id,
+        "assistant",
+        result["answer"]
+    )
+
+    return result

@@ -1,36 +1,54 @@
-from llm.chat import chat
 from retrieval.retriever import retriever
-from memory.history import get_history, add_message
-def ask(question:str, session_id):
-    chunks = retriever(question)
+from llm.chat import chat
 
-    context = "\n\n".join(
-        chunk["text"]
-        for chunk in chunks
+
+def build_context(results):
+    context_parts = []
+
+    for result in results:
+        context_parts.append(
+            f"Source: {result['filename']}\n"
+            f"{result['text']}"
+        )
+
+    return "\n\n".join(context_parts)
+
+
+def rag_pipeline(question: str, history: str = ""):
+
+    results = retriever(
+        question,
+        limit=5
     )
 
-    history= get_history(
-        session_id
-    )
+    if not results:
+        return {
+            "answer": "I could not find relevant information in the provided documents.",
+            "sources": []
+        }
 
+    context = build_context(results)
 
     answer = chat(
         question=question,
-        context = context,
-        history= history
+        context=context,
+        history=history
     )
 
-    add_message(session_id, "user", question)
-    add_message(session_id, "assistant", answer)
+    sources = []
 
-    sources = [
-       {
-         "text": chunk["text"]  
-       }
-       for chunk in chunks
-   ]
+    for result in results:
+        sources.append(
+    {
+        "filename": result["filename"],
+        "document_id": result["document_id"],
+        "page": result["page"],
+        "chunk_index": result["chunk_index"],
+        "rerank_score": result.get("rerank_score")
+    }
+)
 
     return {
         "answer": answer,
-        "sources":sources
+        "sources": sources
     }
