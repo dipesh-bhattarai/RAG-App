@@ -2,6 +2,7 @@ from retrieval.retriever import retriever
 from llm.chat import chat
 from rag.query_rewriter import rewrite_query
 from rag.context_filter import filter_context
+from rag.citation_verifier import verify_answer
 
 def build_context(results):
     context_parts = []
@@ -47,6 +48,12 @@ def rag_pipeline(question: str, history: str = ""):
         history=history
     )
 
+    supported = verify_answer(
+        question=question,
+        answer=answer,
+        context=context
+    )
+
     sources = []
 
     for result in results:
@@ -60,7 +67,8 @@ def rag_pipeline(question: str, history: str = ""):
     }
 )
 
-    return {
+        return {
         "answer": answer,
-        "sources": sources
+        "sources": sources,
+        "citation_verified": supported
     }
