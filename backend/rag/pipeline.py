@@ -1,7 +1,7 @@
 from retrieval.retriever import retriever
 from llm.chat import chat
 from rag.query_rewriter import rewrite_query
-
+from rag.context_filter import filter_context
 
 def build_context(results):
     context_parts = []
@@ -26,6 +26,12 @@ def rag_pipeline(question: str, history: str = ""):
         search_query,
         limit=5
     )
+
+    results = filter_context(
+    results,
+    threshold=0.0,
+    max_chunks=3
+)
 
     if not results:
         return {
