@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="banner-image-for-rag.png" alt="RAG-App banner" width="100%">
+  <img src="images/bannerimage.jpg" alt="RAG-App banner" width="100%">
 </p>
 
 <h1 align="center">RAG-App</h1>
@@ -24,7 +24,7 @@ RAG-App is a full-stack Retrieval-Augmented Generation system. Users upload docu
 
 <!-- 📸 IMAGE 1: Architecture diagram -->
 <p align="center">
-  <img src="docs/images/architecture-diagram.png" alt="Architecture diagram" width="80%">
+  <img src="images/rag_app_high_level_architecture.png" alt="Architecture diagram" width="80%">
 </p>
 
 ## Features
@@ -55,7 +55,7 @@ RAG-App is a full-stack Retrieval-Augmented Generation system. Users upload docu
 
 <!-- 📸 IMAGE 2: App screenshot or GIF of the chat UI in action -->
 <p align="center">
-  <img src="docs/images/demo-screenshot.png" alt="App demo screenshot" width="80%">
+  <img src="images/demo.png" alt="App demo screenshot" width="80%">
 </p>
 
 ## Project Structure
@@ -100,7 +100,7 @@ RAG-App/
 
 <!-- 📸 IMAGE 3: Optional — data flow / sequence diagram of a single query -->
 <p align="center">
-  <img src="docs/images/query-flow-diagram.png" alt="Query flow diagram" width="80%">
+  <img src="images/rag_app_query_pipeline.png" alt="Query flow diagram" width="80%">
 </p>
 
 ## Getting Started
@@ -167,7 +167,7 @@ The `backend/evaluation/` module includes scripts to benchmark retrieval and ans
 python -m backend.evaluation.evaluate
 ```
 
-*(Add details on what metrics this reports, e.g. retrieval precision/recall, citation accuracy, etc.)*
+<!-- *(Add details on what metrics this reports, e.g. retrieval precision/recall, citation accuracy, etc.)* -->
 
 ## Future Improvements
 
@@ -178,4 +178,3 @@ python -m backend.evaluation.evaluate
 
 ## License
 
-*(Add your license here, e.g. MIT)*
