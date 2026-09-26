@@ -3,7 +3,14 @@ from fastapi import FastAPI
 from api.upload import router as upload_router
 from api.document import router as document_router
 from api.chat import router as chat_router
+import logging
+import sys
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    stream=sys.stdout
+)
 
 app = FastAPI()
 
