@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api.upload import router as upload_router
+from ingestion.pipeline import ingest_pdf
 
 app = FastAPI()
 
