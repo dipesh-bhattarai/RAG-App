@@ -56,24 +56,35 @@ def create_collection(vector_size: int):
 
 
 def store_embeddings(embeddings):
-    points = []
-    for item in embeddings:
-        points.append(
-            PointStruct(
-                id= str(uuid4()),
-                vector = item["embedding"],
-                payload={
-    "text": item["text"],
-    "filename": item["filename"],
-    "document_id": item["document_id"],
-    "page": item["page"],
-    "chunk_index": item["chunk_index"],
-}
+
+    batch_size = 10
+
+    for start in range(0, len(embeddings), batch_size):
+
+        batch = embeddings[start:start + batch_size]
+
+        points = []
+
+        for item in batch:
+
+            points.append(
+                PointStruct(
+                    id=str(uuid4()),
+                    vector=item["embedding"],
+                    payload={
+                        "text": item["text"],
+                        "filename": item["filename"],
+                        "document_id": item["document_id"],
+                        "page": item["page"],
+                        "chunk_index": item["chunk_index"],
+                    }
+                )
             )
+
+        client.upsert(
+            collection_name=COLLECTION_NAME,
+            points=points
         )
-
-
-    client.upsert(collection_name = COLLECTION_NAME, points=points)
 
 def list_document():
     documents = {}
